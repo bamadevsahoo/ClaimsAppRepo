@@ -1,0 +1,168 @@
+<!--<div style="padding-top: 20px; ">
+    <h4 class="alert-primary" style="border-radius: 10px;padding-left: 10px; padding-top: 10px;padding-bottom: 10px;">Accident Information Form
+        <br>
+        <h6>Please provide as much details as possible about the accident.</h6>
+    </h4>
+</div>-->
+<h6 class="alert alert-success" *ngIf="IsClaimSubmitted">Your claim has been submitted successfully with claim number #
+    <button mat-button color="primary" (click)="GetClaimDetails(insertResult.claimNumber)">{{insertResult.claimNumber}}</button>
+</h6>
+
+<hr>
+<mat-horizontal-stepper *ngIf="!IsClaimSubmitted" labelPosition="bottom" #stepper>
+    <mat-step [stepControl]="firstFormGroup">
+        <form [formGroup]="firstFormGroup">
+            <ng-template matStepLabel>Fill out insured information</ng-template>
+
+            <mat-form-field class="ctrlWidth">
+                <input matInput placeholder="Claim Title" [(ngModel)]="ClaimTitle" maxlength="50" formControlName="ClaimTitelCtrl" required>
+            </mat-form-field>
+            <br>
+            <mat-form-field class="ctrlWidth">
+                <input matInput placeholder="Name of Insured" [(ngModel)]="InsuredName" maxlength="50" formControlName="InsuredNameCtrl"
+                    required>
+            </mat-form-field>
+            <br>
+            <mat-form-field class="ctrlWidth">
+                <input matInput placeholder="Policy Number" [(ngModel)]="PolicyNumber" maxlength="50" formControlName="policyNumberCtrl"
+                    required>
+            </mat-form-field>
+            <br>
+
+            <mat-form-field class="ctrlWidth">
+                <input matInput placeholder="Producer Code" [(ngModel)]="producercode" maxlength="50" formControlName="producerCodeCtrl"
+                    required>
+            </mat-form-field>
+            <br>
+            <mat-form-field class="ctrlWidth">
+                <input matInput placeholder="Insurance Company" [(ngModel)]="InsuranceCompany" maxlength="50" formControlName="InsuredCompanyCtrl"
+                    required>
+            </mat-form-field>
+            <br>
+            <mat-form-field class="ctrlWidth">
+                <input matInput type="number" maxlength="12" [(ngModel)]="PhoneNumber" placeholder="Phone number" formControlName="PhoneNumberCtrl"
+                    required>
+            </mat-form-field>
+
+
+            <div>
+                <button mat-stroked-button color="primary" matStepperNext>Next</button>
+            </div>
+        </form>
+    </mat-step>
+    <mat-step [stepControl]="secondFormGroup">
+        <form [formGroup]="secondFormGroup">
+            <ng-template matStepLabel>Fill out claim information</ng-template>
+
+            <mat-form-field>
+                <input matInput [matDatepicker]="DateofeventPicker" [(ngModel)]="DateOfEvent" readonly placeholder="Date of Event" formControlName="DateofeventCtrl"
+                    required>
+                <mat-datepicker-toggle matSuffix [for]="DateofeventPicker"></mat-datepicker-toggle>
+                <mat-datepicker #DateofeventPicker></mat-datepicker>
+            </mat-form-field>
+            <br>
+            <mat-form-field class="ctrlWidth">
+                <mat-select placeholder="State of event took place in" [(ngModel)]="EventLocation" formControlName="accidentstateCtrl" required>
+                    <mat-option *ngFor="let state of States" [value]="state.value">
+                        {{state.viewValue}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <br>
+            <mat-form-field class="ctrlWidth">
+                <mat-select placeholder="Insured Car Model" [(ngModel)]="MakeModel" formControlName="CarModelCtrl" required>
+                    <mat-option *ngFor="let modelcar of MakeModels" [value]="modelcar.value">
+                        {{modelcar.viewValue}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <br>
+            <mat-form-field class="ctrlWidth">
+                <input matInput type="number" placeholder="Number of Vehicle Involved" [(ngModel)]="NumberOfvehicle" formControlName="numberofcarsCtrl"
+                    required>
+            </mat-form-field>
+
+            <div>
+                <button mat-stroked-button color="primary" matStepperPrevious>Back</button>
+                <button mat-stroked-button color="primary" matStepperNext>Next</button>
+            </div>
+        </form>
+    </mat-step>
+    <mat-step>
+        <form [formGroup]="thirdFormGroup">
+            <ng-template matStepLabel>Done</ng-template>
+
+            <div>
+                <mat-form-field class="ctrlWidthComments">
+                    <textarea matInput placeholder="Please Describe the Accident." [(ngModel)]="EventInfo" formControlName="DescribeAccidentCtrl"
+                        required></textarea>
+                </mat-form-field>
+
+                <br>
+               Upload Supporting Document.
+                    <input  class="btn btn-secondary" type="file" name="file" type="file" (change)="fileEvent($event)"
+                    />
+              
+                <button mat-raised-button color="primary" (click)="CreateClaim(stepper)" style="margin: 20px;">Submit</button>
+
+                <br>
+                <button mat-stroked-button color="primary" matStepperPrevious>Back</button>
+                <button mat-stroked-button color="primary" (click)="stepper.reset()">Reset</button>
+            </div>
+        </form>
+    </mat-step>
+</mat-horizontal-stepper>
+<hr>
+
+
+<div class="example-container" *ngIf="IsDispalyclaim">
+    <mat-form-field class="ctrlWidth">
+        <input matInput placeholder="Claim Number" value="{{ViewClaimDetails.claimNumber}}" readonly>
+    </mat-form-field>
+    <br>
+    <mat-form-field class="ctrlWidth">
+        <input matInput placeholder="Claim Title" value="{{ViewClaimDetails.ClaimTitle}}" readonly>
+    </mat-form-field>
+    <br>
+    <mat-form-field class="ctrlWidth">
+        <input matInput placeholder="Name of Insured" value="{{ViewClaimDetails.InsuredName}}" readonly>
+    </mat-form-field>
+    <br>
+    <mat-form-field class="ctrlWidth">
+        <input matInput placeholder="Policy Number" value="{{ViewClaimDetails.PolicyNumber}}" readonly>
+    </mat-form-field>
+    <br>
+
+    <mat-form-field class="ctrlWidth">
+        <input matInput placeholder="Producer Code" value="{{ViewClaimDetails.producercode}}" readonly>
+    </mat-form-field>
+    <br>
+    <mat-form-field class="ctrlWidth">
+        <input matInput placeholder="Insurance Company" value="{{ViewClaimDetails.InsuranceCompany}}" readonly>
+    </mat-form-field>
+    <br>
+    <mat-form-field class="ctrlWidth">
+        <input matInput type="number" placeholder="Phone number" maxlength="12" value="{{ViewClaimDetails.PhoneNumber}}" readonly>
+    </mat-form-field>
+    <mat-form-field>
+        <input matInput placeholder="Date of Event" value="{{ViewClaimDetails.DateOfEvent}}" readonly>
+    </mat-form-field>
+    <br>
+    <mat-form-field class="ctrlWidth">
+        <input matInput placeholder="EventLocation" value="{{ViewClaimDetails.EventLocation}}" readonly>
+    </mat-form-field>
+    <br>
+    <mat-form-field class="ctrlWidth">
+        <input matInput placeholder="MakeModel" value="{{ViewClaimDetails.MakeModel}}" readonly>
+    </mat-form-field>
+    <br>
+    <mat-form-field class="ctrlWidth">
+        <input matInput type="number" placeholder="Number of Vehicle involved" value="{{ViewClaimDetails.NumberOfvehicle}}" readonly>
+    </mat-form-field>
+    <br>
+    <mat-form-field class="ctrlWidthComments">
+        <textarea matInput placeholder="Please describe the accident." value="{{ViewClaimDetails.EventInfo}}" readonly></textarea>
+    </mat-form-field>
+    <br>
+   <!-- <img [profile-image]="tile.UserId" width="100" height="100" />-->
+</div>
