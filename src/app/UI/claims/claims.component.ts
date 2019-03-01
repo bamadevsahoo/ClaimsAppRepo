@@ -1,4 +1,4 @@
-import { Component, NgModule, OnInit,Directive } from '@angular/core';
+import { Component, NgModule, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatFileUploadModule }  from 'angular-material-fileupload';
 import { SharedServiceService } from 'src/app/shared-service.service';
@@ -108,6 +108,7 @@ public IsDispalyclaim:boolean=false;
     };
   
     this._service.createclaims(claimdetails).subscribe(data=>this.insertResult=data);
+    console.log(this.insertResult);
      this.IsClaimSubmitted= true;
      this.IsDispalyclaim=false;
     this.resetStepper(stepperform);

@@ -9,7 +9,9 @@ import { map } from 'rxjs/operators';
 export class SharedServiceService {
 
   constructor(private http: HttpClient) { }
-  baseUrl: string = 'http://localhost:64439/api/AutoClaimsAPI/';
+  
+  baseUrl: string = 'https://insuranceclaimsapi.azurewebsites.net/api/AutoClaimsAPI/';
+  //baseUrl: string = 'http://localhost:64439/api/AutoClaimsAPI/';
  
 
   getAllClaims() {
